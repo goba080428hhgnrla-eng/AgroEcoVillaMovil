@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_inicio_drawer"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="Inicio" />
+
+       <item
+            android:id="@+id/nav_favorito"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Favoritos" />
+
+        <!--<item
+            android:id="@+id/nav_Compras_drawer"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Mis compras" />-->
+
+        <!-- <item
+            android:id="@+id/nav_carrito_drawer"
+            android:icon="@android:drawable/ic_menu_edit"
+            android:title="Mi Carrito" />
+
+        <item
+            android:id="@+id/nav_pedidos_drawer"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="Mis Pedidos" />
+
+        <item
+            android:id="@+id/nav_perfil_drawer"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Mi Perfil" />-->
+    </group>
+
+    <group android:checkableBehavior="single">
+       <!-- <item
+            android:id="@+id/nav_configuracion"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="Configuración" />
+
+        <item
+            android:id="@+id/nav_ayuda"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="Ayuda" />
+
+        <item
+            android:id="@+id/nav_cerrar_sesion"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="Cerrar Sesión" />-->
+    </group>
+
+</menu>

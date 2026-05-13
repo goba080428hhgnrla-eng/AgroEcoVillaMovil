@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:gravity="center"
+    android:background="#F5F5F5">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registro"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#2C3E50"
+        android:layout_marginBottom="30dp"/>
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Nombre completo"
+        android:inputType="textPersonName"
+        android:background="@android:drawable/editbox_background"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/etCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Correo electrónico"
+        android:inputType="textEmailAddress"
+        android:background="@android:drawable/editbox_background"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:background="@android:drawable/editbox_background"
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/btnRegistro"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="CREAR CUENTA"
+        android:backgroundTint="#27AE60"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/tvIrLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Ya tienes cuenta? Inicia sesión"
+        android:layout_marginTop="20dp"
+        android:textColor="#2980B9"
+        android:textStyle="bold"/>
+
+</LinearLayout>
