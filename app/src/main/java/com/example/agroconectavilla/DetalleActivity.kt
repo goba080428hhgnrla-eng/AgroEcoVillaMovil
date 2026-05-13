@@ -32,6 +32,7 @@ class DetalleActivity : AppCompatActivity() {
     private lateinit var btnAgregarCarrito: Button
 
     private lateinit var btnagregar2: ImageButton
+    private lateinit var iconCompartir: ImageButton
 
     private lateinit var sessionManager: SessionManager
     private var productoCompleto: JSONObject? = null
@@ -42,7 +43,7 @@ class DetalleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detalle)
 
         sessionManager = SessionManager(this)
-
+        iconCompartir=findViewById<ImageButton>(R.id.iconCompartir)
         txtNombre = findViewById(R.id.txtNombre)
         txtPrecio = findViewById(R.id.txtPrecio)
         txtDescripcion = findViewById(R.id.txtDescripcion)
@@ -76,8 +77,31 @@ class DetalleActivity : AppCompatActivity() {
             btnFavorito = findViewById(R.id.btnFavorito)
             agregarAFavoritos()
         }
+        iconCompartir.setOnClickListener {
+            compartirProducto()
+        }
     }
+    private fun compartirProducto() {
+        // Extrae de forma segura el nombre y precio del producto actual
+        val nombreProducto = productoCompleto?.optString("nombre", "Producto") ?: "Producto"
+        val precioProducto = productoCompleto?.optDouble("precio", 0.0) ?: 0.0
+        val idProducto = intent.getIntExtra("id", 0)
 
+        // Arma el mensaje de texto que se enviará por WhatsApp o cualquier red social
+        val textoCompartir = "¡Mira este producto en AgroConectaVilla!\n\n" +
+                "*$nombreProducto*\n" +
+                "Precio: $$precioProducto\n\n" +
+                "Ver más detalles aquí: ${baseUrl}api/producto/$idProducto/"
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, textoCompartir)
+            putExtra(Intent.EXTRA_SUBJECT, "Te comparto este gran producto")
+        }
+
+        // Despliega el menú nativo del celular
+        startActivity(Intent.createChooser(shareIntent, "Compartir usando:"))
+    }
     private fun cargarDetalle(id: Int) {
         val queue = Volley.newRequestQueue(this)
         val url = "$baseUrl" + "api/producto/$id/"
@@ -255,22 +279,6 @@ class DetalleActivity : AppCompatActivity() {
         queue.add(request)
     }
 
-    private fun compartirProducto(){
-        val iconCompartir = findViewById<ImageView>(R.id.iconCompartir)
-
-        iconCompartir.setOnClickListener {
-            val textoCompartir = "Comparte este contenido https://tusitio.com"
-
-            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, textoCompartir)
-                // Agregacion del Gmail
-                putExtra(Intent.EXTRA_SUBJECT, "Asunto del mensaje")
-            }
-            // menu de selecciones de la aplicacion o dispositivo
-            startActivity(Intent.createChooser(shareIntent, "Compartir usando:"))
-        }
-    }
 
 
     private fun agregarAFavoritos() {
