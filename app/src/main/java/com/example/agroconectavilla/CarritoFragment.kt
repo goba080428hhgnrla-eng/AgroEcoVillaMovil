@@ -85,7 +85,7 @@ class CarritoFragment : Fragment() {
         recycler.adapter = adapter
 
         btnContinuar.setOnClickListener {
-            Toast.makeText(requireContext(), "Próximamente: Finalizar pedido", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Finalizar pedido", Toast.LENGTH_LONG).show()
         }
 
         // Verificar que tenemos un usuario válido

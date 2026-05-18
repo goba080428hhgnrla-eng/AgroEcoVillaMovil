@@ -1,20 +1,19 @@
 package com.example.agroconectavilla.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agroconectavilla.FragmentDetalle
 import com.example.agroconectavilla.R
 import com.example.agroconectavilla.network.Favorito
-import com.example.agroconectavilla.network.Producto
 import com.example.agroconectavilla.utils.Constants
+
 class FavoritosAdapter(
     private val lista: MutableList<Favorito>,
     private val context: Context,
@@ -28,7 +27,7 @@ class FavoritosAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(v: android.view.View) : RecyclerView.ViewHolder(v) {
         val imgProducto: ImageView = v.findViewById(R.id.imgProducto)
         val txtNombre: TextView = v.findViewById(R.id.txtNombre)
         val txtPrecio: TextView = v.findViewById(R.id.txtPrecio)
@@ -61,9 +60,14 @@ class FavoritosAdapter(
 
         // Click para ver detalle del producto
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, FragmentDetalle::class.java)
-            intent.putExtra("id", producto.id)
-            context.startActivity(intent)
+            val fragment = FragmentDetalle.newInstance(producto.id)  // Usar producto.id
+
+            (context as AppCompatActivity)
+                .supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frameContainer, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         // Click para eliminar de favoritos

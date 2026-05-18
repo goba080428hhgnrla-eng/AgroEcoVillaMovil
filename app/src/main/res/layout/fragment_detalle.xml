@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
+
         <!-- ENCABEZADO -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,14 +37,33 @@
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
 
-            <!-- Imagen -->
-            <ImageView
-                android:id="@+id/imgProducto"
+            <!-- Imagen Principal -->
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="250dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:background="#DDDDDD"/>
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imgProducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="#DDDDDD"/>
+
+                <!-- Indicador de posición -->
+                <TextView
+                    android:id="@+id/txtImageIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:background="#88000000"
+                    android:padding="4dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:layout_margin="8dp"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
 
             <!-- ICONOS LATERALES -->
             <LinearLayout
@@ -80,41 +100,37 @@
 
         </LinearLayout>
 
-        <!-- MINI IMAGENES -->
-        <HorizontalScrollView
+        <!-- CARRUSEL DE IMÁGENES MINIATURAS -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
+            android:orientation="vertical"
             android:layout_marginTop="12dp">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="Galería"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp"/>
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    android:scaleType="centerCrop"/>
+            <HorizontalScrollView
+                android:id="@+id/scrollViewThumbnails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal">
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    android:scaleType="centerCrop"/>
+                <LinearLayout
+                    android:id="@+id/thumbnailContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"/>
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    android:scaleType="centerCrop"/>
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
+            </HorizontalScrollView>
+        </LinearLayout>
 
         <!-- PRECIO -->
         <TextView

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -34,14 +35,17 @@ class FragmentDetalle : Fragment() {
     private lateinit var btnAgregarCarrito: Button
     private lateinit var btnagregar2: ImageButton
     private lateinit var iconCompartir: ImageButton
+    private lateinit var thumbnailContainer: LinearLayout
+    private lateinit var txtImageIndicator: TextView
 
     private lateinit var sessionManager: SessionManager
-
     private var productoCompleto: JSONObject? = null
-
     private val baseUrl: String = Constants.BASE_URL
-
     private var productoId: Int = 0
+
+    // Lista de URLs de imágenes
+    private val listaImagenes = mutableListOf<String>()
+    private var currentImageIndex = 0
 
     companion object {
         private const val ARG_PRODUCTO_ID = "producto_id"
@@ -86,6 +90,8 @@ class FragmentDetalle : Fragment() {
         btnFavorito = view.findViewById(R.id.btnFavorito)
         btnagregar2 = view.findViewById(R.id.btnCarritoIcon)
         iconCompartir = view.findViewById(R.id.iconCompartir)
+        thumbnailContainer = view.findViewById(R.id.thumbnailContainer)
+        txtImageIndicator = view.findViewById(R.id.txtImageIndicator)
     }
 
     private fun setupClickListeners() {
@@ -112,12 +118,17 @@ class FragmentDetalle : Fragment() {
         iconCompartir.setOnClickListener {
             compartirProducto()
         }
+
+        // Click en la imagen principal para cambiar a la siguiente
+        imagen.setOnClickListener {
+            if (listaImagenes.size > 1) {
+                mostrarSiguienteImagen()
+            }
+        }
     }
 
     private fun loadProductData() {
         sessionManager = SessionManager(requireContext())
-
-        // Obtener ID del producto de los argumentos
         productoId = arguments?.getInt(ARG_PRODUCTO_ID) ?: 0
 
         if (productoId != 0) {
@@ -128,6 +139,60 @@ class FragmentDetalle : Fragment() {
                 "ID de producto no válido",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun mostrarSiguienteImagen() {
+        if (listaImagenes.isEmpty()) return
+
+        currentImageIndex = (currentImageIndex + 1) % listaImagenes.size
+        cargarImagenPrincipal(listaImagenes[currentImageIndex])
+        actualizarMiniaturasSeleccion(currentImageIndex)
+        actualizarIndicador()
+    }
+
+    private fun mostrarImagenAnterior() {
+        if (listaImagenes.isEmpty()) return
+
+        currentImageIndex = if (currentImageIndex - 1 < 0) {
+            listaImagenes.size - 1
+        } else {
+            currentImageIndex - 1
+        }
+        cargarImagenPrincipal(listaImagenes[currentImageIndex])
+        actualizarMiniaturasSeleccion(currentImageIndex)
+        actualizarIndicador()
+    }
+
+    private fun cargarImagenPrincipal(url: String) {
+        Glide.with(requireContext())
+            .load(url)
+            .placeholder(android.R.drawable.ic_menu_gallery)
+            .error(android.R.drawable.ic_menu_gallery)
+            .into(imagen)
+    }
+
+    private fun actualizarMiniaturasSeleccion(selectedIndex: Int) {
+        for (i in 0 until thumbnailContainer.childCount) {
+            val thumbnail = thumbnailContainer.getChildAt(i) as ImageView
+            val isSelected = i == selectedIndex
+            thumbnail.setBackgroundColor(
+                if (isSelected) {
+                    android.graphics.Color.parseColor("#4CAF50")
+                } else {
+                    android.graphics.Color.TRANSPARENT
+                }
+            )
+            thumbnail.setPadding(4, 4, 4, 4)
+        }
+    }
+
+    private fun actualizarIndicador() {
+        if (listaImagenes.size > 1) {
+            txtImageIndicator.visibility = View.VISIBLE
+            txtImageIndicator.text = "${currentImageIndex + 1}/${listaImagenes.size}"
+        } else {
+            txtImageIndicator.visibility = View.GONE
         }
     }
 
@@ -164,6 +229,7 @@ class FragmentDetalle : Fragment() {
             { response ->
                 productoCompleto = response
                 mostrarInformacionBasica(response)
+                procesarImagenes(response)
             },
             { error ->
                 error.printStackTrace()
@@ -176,6 +242,61 @@ class FragmentDetalle : Fragment() {
         )
 
         queue.add(request)
+    }
+
+    private fun procesarImagenes(response: JSONObject) {
+        listaImagenes.clear()
+        val imagenes: JSONArray = response.getJSONArray("imagenes")
+
+        for (i in 0 until imagenes.length()) {
+            val imgUrl = imagenes.getString(i)
+            val urlCompleta = "$baseUrl$imgUrl"
+            listaImagenes.add(urlCompleta)
+        }
+
+        if (listaImagenes.isNotEmpty()) {
+            cargarImagenPrincipal(listaImagenes[0])
+            currentImageIndex = 0
+            crearMiniaturas()
+            actualizarIndicador()
+        }
+    }
+
+    private fun crearMiniaturas() {
+        thumbnailContainer.removeAllViews()
+
+        for (i in listaImagenes.indices) {
+            val imagenUrl = listaImagenes[i]
+            val thumbnail = ImageView(requireContext()).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    80,  // Ancho en dp
+                    80   // Alto en dp
+                ).apply {
+                    marginEnd = 8
+                }
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                setPadding(2, 2, 2, 2)
+
+                // Cargar miniatura
+                Glide.with(requireContext())
+                    .load(imagenUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_gallery)
+                    .into(this)
+
+                // Click para cambiar a esta imagen
+                setOnClickListener {
+                    currentImageIndex = i
+                    cargarImagenPrincipal(imagenUrl)
+                    actualizarMiniaturasSeleccion(currentImageIndex)
+                    actualizarIndicador()
+                }
+            }
+            thumbnailContainer.addView(thumbnail)
+        }
+
+        // Seleccionar la primera miniatura por defecto
+        actualizarMiniaturasSeleccion(0)
     }
 
     private fun mostrarInformacionBasica(response: JSONObject) {
@@ -193,16 +314,6 @@ class FragmentDetalle : Fragment() {
 
         if (response.getBoolean("entregable")) {
             txtEntregable.visibility = View.VISIBLE
-        }
-
-        val imagenes: JSONArray = response.getJSONArray("imagenes")
-        if (imagenes.length() > 0) {
-            val imgUrl = imagenes.getString(0)
-            Glide.with(requireContext())
-                .load("$baseUrl$imgUrl")
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
-                .into(imagen)
         }
     }
 
