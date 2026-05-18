@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                         val user = response.body()
 
                         // Ir al Home y enviar el nombre del usuario
-                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        val intent = Intent(this@LoginActivity, InicioFragment::class.java)
                         intent.putExtra("USER_NAME", user?.nombre)
                         startActivity(intent)
                         finish() // Cerramos el login para que no pueda volver atrás

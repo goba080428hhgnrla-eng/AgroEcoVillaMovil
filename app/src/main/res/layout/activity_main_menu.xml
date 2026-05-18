@@ -35,6 +35,11 @@
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
+
+            app:itemIconTint="@color/bottom_nav_colors"
+            app:itemTextColor="@color/bottom_nav_colors"
+
             app:menu="@menu/bottom_menu"/>
 
     </LinearLayout>

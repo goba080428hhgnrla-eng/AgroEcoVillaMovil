@@ -29,11 +29,6 @@
             android:exported="false" />
 
         <!-- 3. HomeActivity -->
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <activity android:name=".CatalogoActivity" />
-        <activity android:name=".DetalleActivity" />
         <activity android:name=".MainMenuActivity"/>
 
     </application>

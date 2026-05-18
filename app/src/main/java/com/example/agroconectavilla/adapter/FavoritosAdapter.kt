@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.agroconectavilla.DetalleActivity
+import com.example.agroconectavilla.FragmentDetalle
 import com.example.agroconectavilla.R
 import com.example.agroconectavilla.network.Favorito
 import com.example.agroconectavilla.network.Producto
@@ -61,7 +61,7 @@ class FavoritosAdapter(
 
         // Click para ver detalle del producto
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, DetalleActivity::class.java)
+            val intent = Intent(context, FragmentDetalle::class.java)
             intent.putExtra("id", producto.id)
             context.startActivity(intent)
         }

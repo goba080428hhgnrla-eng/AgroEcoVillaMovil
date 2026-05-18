@@ -12,9 +12,10 @@
         android:id="@+id/toolbarFavoritos"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#2C3E50"
+        android:background="#ffffff"
+        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#FFFFFF"
+        app:titleTextColor="#FF000000"
         app:title="Mis Favoritos" />
 
     <!-- Contenedor -->
