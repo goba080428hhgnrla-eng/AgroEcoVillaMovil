@@ -8,12 +8,14 @@
     android:gravity="center"
     android:background="#F5F5F5">
 
+    <!-- Logo de la aplicación -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="98dp"
         android:layout_height="115dp"
         app:srcCompat="@drawable/logo" />
 
+    <!-- Título principal de la pantalla -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,6 +25,7 @@
         android:textColor="#2C3E50"
         android:layout_marginBottom="30dp"/>
 
+    <!-- Campo para ingresar el email -->
     <EditText
         android:id="@+id/etCorreo"
         android:layout_width="match_parent"
@@ -33,6 +36,7 @@
         android:paddingLeft="15dp"
         android:layout_marginBottom="15dp"/>
 
+    <!-- Campo para la contraseña: -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
@@ -43,6 +47,7 @@
         android:paddingLeft="15dp"
         android:layout_marginBottom="25dp"/>
 
+    <!-- Botón de validacion de acceso  al sistema -->
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
@@ -53,6 +58,7 @@
         android:textStyle="bold"
         android:elevation="4dp"/>
 
+    <!-- Enlace para poderte resgistar  -->
     <TextView
         android:id="@+id/tvIrRegistro"
         android:layout_width="wrap_content"
