@@ -12,7 +12,8 @@
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="12dp" />
+        android:paddingBottom="12dp"
+        android:textColor="@color/txt_inicio"/>
 
     <ScrollView
         android:layout_width="match_parent"

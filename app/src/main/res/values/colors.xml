@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="botones">#27AE60</color>
+    <color name="link_referencia">#1C8BFB</color>
+    <color name="txt_inicio">#2C3E50</color>
+    <color name="txtBtn">#FFFFFF</color>
+    <color name="clr_super">#00C853</color>
+    <color name="bar_infe">#05255F</color>
 </resources>

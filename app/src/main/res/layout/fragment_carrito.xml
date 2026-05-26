@@ -14,7 +14,8 @@
         android:background="#ffffff"
         android:elevation="4dp"
         app:title="Mi Carrito"
-        app:titleTextColor="#000000" />
+        app:titleTextColor="@color/txt_inicio"
+        android:backgroundTint="@color/botones"/>
 
     <!-- Lista de productos -->
     <androidx.recyclerview.widget.RecyclerView
