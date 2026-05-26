@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Archivo principal -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.agroconectavilla">
 
+    <!-- Permiso para internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,25 +15,48 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-
-        <!-- 1. MainActivity (LOGIN) -->
+        <!-- MAIN -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
+            <!-- Launcher -->
             <intent-filter>
+                <!-- Inicio app -->
                 <action android:name="android.intent.action.MAIN" />
+                <!-- Icono launcher -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Link -->
+            <intent-filter>
+
+                <!-- Abrir enlace -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <!-- Categoría default -->
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- Abrir desde navegador -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- URL permitida -->
+                <data
+                    android:scheme="https"
+                    android:host="ritalin-detonator-womb.ngrok-free.dev" />
+
+            </intent-filter>
+
         </activity>
 
-        <!-- 2. RegistroActivity -->
+        <!-- Registro -->
         <activity
             android:name=".RegistroActivity"
             android:exported="false" />
 
-        <!-- 3. HomeActivity -->
-        <activity android:name=".MainMenuActivity"/>
+        <!-- Menú principal -->
+        <activity
+            android:name=".MainMenuActivity"
+            android:exported="true" />
 
     </application>
-
+<!--Fin de manifest-->
 </manifest>
