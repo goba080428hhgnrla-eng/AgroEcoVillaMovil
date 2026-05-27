@@ -90,7 +90,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@android:drawable/ic_input_add"
-                    android:background="btn_agregarproduc"
+                    android:background="#ffffff"
                     android:padding="8dp" />
 
             </LinearLayout>
