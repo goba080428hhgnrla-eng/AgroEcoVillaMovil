@@ -7,118 +7,174 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.agroconectavilla.utils.Constants
 import org.json.JSONObject
 
 /**
  * Pantalla encargada de gestionar la creación de nuevas cuentas de usuario (RegistroActivity).
- * Recopila los datos del formulario (nombre, correo y contraseña), realiza una validación básica local,
- * y los envía mediante una petición HTTP POST asíncrona (usando Volley) al backend.
- * Tras un registro exitoso, redirige al usuario a la pantalla de autenticación para que inicie sesión.
+ * Captura un único campo de Nombre Completo y envía los datos estructurados a Django en Render.
  */
 class RegistroActivity : AppCompatActivity() {
 
-    // URL base extraída del archivo de configuraciones globales de la app
+    // URL base extraída del archivo de configuraciones globales de la app (Sin barra '/' al final)
     private val baseUrl: String = Constants.BASE_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Vincular el archivo de diseño XML correspondiente al formulario de registro
         setContentView(R.layout.activity_registro)
 
-        // Inicialización y vinculación de componentes de la interfaz de usuario (UI)
-        val etNombre = findViewById<EditText>(R.id.etNombre)
+        // Vinculación de componentes de la interfaz de usuario (UI)
+        // IMPORTANTE: Asegúrate de que el ID en tu XML sea etNombreCompleto
+        val etNombreCompleto = findViewById<EditText>(R.id.etNombre)
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnRegistro = findViewById<Button>(R.id.btnRegistro)
         val tvIrLogin = findViewById<TextView>(R.id.tvIrLogin)
 
-        // Configurar el evento de escucha para el botón de confirmación de registro
+        // Evento de escucha para el botón de confirmación de registro
         btnRegistro.setOnClickListener {
-            // Capturar las entradas de texto removiendo espacios en blanco en los extremos
-            val nombre = etNombre.text.toString().trim()
+            val nombreCompleto = etNombreCompleto.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Validación de precondición local: Asegurar que ningún campo esté vacío
-            if (nombre.isEmpty() || correo.isEmpty() || password.isEmpty()) {
+            // Validación local básica: Asegurar que ningún campo esté vacío
+            if (nombreCompleto.isEmpty() || correo.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Invocar la rutina encargada de la comunicación con el servidor remoto
-            registrarUsuario(nombre, correo, password)
+            // Invocar el método de registro
+            registrarUsuario(nombreCompleto, correo, password)
         }
 
-        // Configurar la navegación de retorno para usuarios que ya poseen una cuenta activa
+        // Configurar la navegación de retorno para usuarios que ya poseen una cuenta
         tvIrLogin.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-            // Finalizar esta actividad para retirarla del historial de navegación (backstack)
             finish()
         }
     }
 
     /**
-     * Envía las credenciales del nuevo usuario al endpoint de la API REST mediante un método POST.
-     * Evalúa la respuesta en formato JSON para notificar el éxito de la operación o desplegar errores de servidor.
-     *
-     * @param nombre Nombre completo o alias del nuevo usuario.
-     * @param correo Dirección de correo electrónico única para el inicio de sesión.
-     * @param password Contraseña elegida por el usuario para resguardar su cuenta.
+     * Envía las credenciales al endpoint de la API REST mediante un StringRequest (POST).
+     * Separa el nombre completo y añade los roles por defecto de la Fase 1.
      */
-    private fun registrarUsuario(nombre: String, correo: String, password: String) {
-        val url = "$baseUrl/api/registro_api/"
+    private fun registrarUsuario(nombreCompleto: String, correo: String, password: String) {
+        // Se construye la URL asegurando que la concatenación no duplique barras diagonales
+        val url = if (baseUrl.endsWith("/")) "${baseUrl}api/registro_api/" else "$baseUrl/api/registro_api/"
         val queue = Volley.newRequestQueue(this)
 
-        // Empaquetar los datos del formulario en un objeto estructurado JSONObject
-        val params = JSONObject()
-        params.put("nombre", nombre)
-        params.put("correo", correo)
-        params.put("password", password)
+        // --- LÓGICA PARA SEPARAR EL NOMBRE COMPLETO ---
+        val partesNombre = nombreCompleto.split("\\s+".toRegex())
+        val nombre: String
+        val apellidoPaterno: String
+        val apellidoMaterno: String
 
-        // Crear la petición de tipo JsonObjectRequest ya que se envía y se espera recibir un objeto JSON
-        val request = JsonObjectRequest(
-            Request.Method.POST,
+        if (partesNombre.size >= 3) {
+            // Ejemplo: "Juan Pérez López" o "Juan Carlos Pérez López"
+            nombre = partesNombre[0]
+            apellidoPaterno = partesNombre[1]
+            // Une el resto en el apellido materno en caso de segundos nombres o apellidos compuestos
+            apellidoMaterno = partesNombre.subList(2, partesNombre.size).joinToString(" ")
+        } else if (partesNombre.size == 2) {
+            // Ejemplo: "Juan Pérez"
+            nombre = partesNombre[0]
+            apellidoPaterno = partesNombre[1]
+            apellidoMaterno = ""
+        } else {
+            // Ejemplo: "Juan"
+            nombre = nombreCompleto
+            apellidoPaterno = ""
+            apellidoMaterno = ""
+        }
+
+        // --- CONSTRUIR EL OBJETO JSON CON LOS PARÁMETROS DE LA FASE 1 ---
+        val params = JSONObject()
+        try {
+            params.put("nombre", nombre)
+            params.put("apellido_paterno", apellidoPaterno)
+            params.put("apellido_materno", apellidoMaterno)
+            params.put("correo", correo)
+            params.put("password", password)
+
+            // Flags de roles requeridas por el nuevo modelo de Django
+            params.put("es_comprador", true)
+            params.put("es_vendedor", false)
+            params.put("es_repartidor", false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // --- PETICIÓN STRINGREQUEST (Evita conflictos de cabeceras y captura respuestas HTML de error) ---
+        val request = object : StringRequest(
+            Method.POST,
             url,
-            params,
             { response ->
                 try {
-                    // Validar si el estado lógico de confirmación devuelto por Django es satisfactorio
-                    if (response.getString("status") == "ok") {
+                    val jsonResponse = JSONObject(response)
+
+                    // Validar si el estado devuelto por Django es satisfactorio
+                    if (jsonResponse.optString("status") == "ok") {
                         Toast.makeText(
                             this,
                             "Registro exitoso. Por favor inicia sesión.",
                             Toast.LENGTH_LONG
                         ).show()
 
-                        // Transferir el flujo de control hacia la pantalla de login principal
+                        // Redirigir al login
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        // El servidor procesó la solicitud pero rechazó los datos (ej: el correo ya existe)
-                        Toast.makeText(
-                            this,
-                            response.optString("message", "Error en el registro"),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        // El servidor rechazó los datos (ej: el correo ya existe)
+                        val mensajeError = jsonResponse.optString("message", "Error en el registro")
+                        Toast.makeText(this, mensajeError, Toast.LENGTH_LONG).show()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(this, "Error en el registro", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error al procesar la respuesta del servidor", Toast.LENGTH_LONG).show()
                 }
             },
             { error ->
-                // Controlar escenarios de falta de internet, DNS caídos o errores HTTP 500
                 error.printStackTrace()
-                Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
+
+                // Inspección detallada del error de red
+                if (error.networkResponse != null) {
+                    val statusCode = error.networkResponse.statusCode
+                    println("CÓDIGO HTTP DESDE RENDER: $statusCode")
+                    Toast.makeText(this, "Error en el servidor (Código: $statusCode)", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Error de conexión: Servidor no disponible o inactivo",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
+        ) {
+            // Definir de forma explícita que el cuerpo es un JSON estructurado
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            // Transformar el JSONObject en un arreglo de Bytes seguro para la transmisión web
+            override fun getBody(): ByteArray {
+                return params.toString().toByteArray(Charsets.UTF_8)
+            }
+        }
+
+        // --- CONFIGURAR POLÍTICA DE TIEMPOS DE ESPERA (TIMEOUT) ---
+        // Se le asignan 70 segundos para tolerar el "Cold Start" (despertar) de las instancias gratuitas de Render
+        request.retryPolicy = DefaultRetryPolicy(
+            70000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
 
-        // Añadir el objeto de petición a la cola de procesamiento asíncrono de Volley
+        // Añadir el objeto a la cola de procesamiento de Volley
         queue.add(request)
     }
 }
