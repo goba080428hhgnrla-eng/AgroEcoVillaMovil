@@ -2,7 +2,6 @@ package com.example.agroconectavilla.adapter
 
 // Importacion de archivos
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.example.agroconectavilla.FragmentDetalle
 import com.example.agroconectavilla.R
 import com.example.agroconectavilla.network.Producto
-import com.example.agroconectavilla.utils.Constants
 
 // Adaptador productos
 class ProductoAdapter(
@@ -23,10 +21,7 @@ class ProductoAdapter(
     private val lista: MutableList<Producto>,
 
     // Contexto
-    private val context: Context,
-
-    // URL base
-    private val baseUrl: String = Constants.BASE_URL
+    private val context: Context
 
 ) : RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
 
@@ -70,17 +65,15 @@ class ProductoAdapter(
         holder.nombre.text = p.nombre
         holder.precio.text = "$${p.precio}"
 
-        // Mostrar badge
+        // Mostrar badge entregable
         holder.entregableBadge.visibility =
             if (p.entregable) View.VISIBLE else View.GONE
 
-        // Imagen
+        // Cargar imagen
         if (!p.imagen.isNullOrEmpty()) {
 
-            val urlFinal = baseUrl + p.imagen
-
             Glide.with(context)
-                .load(urlFinal)
+                .load(p.imagen)
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(android.R.drawable.ic_menu_gallery)
                 .into(holder.img)

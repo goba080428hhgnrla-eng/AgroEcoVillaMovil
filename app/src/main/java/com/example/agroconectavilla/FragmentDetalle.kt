@@ -325,19 +325,32 @@ class FragmentDetalle : Fragment() {
      * @param response Objeto [JSONObject] del servidor con la información del producto.
      */
     private fun procesarImagenes(response: JSONObject) {
+
+        // Limpiar lista previa
         listaImagenes.clear()
+
+        // Obtener arreglo de imágenes desde el JSON
         val imagenes: JSONArray = response.getJSONArray("imagenes")
 
+        // Recorrer imágenes
         for (i in 0 until imagenes.length()) {
+
+            // La URL ya viene COMPLETA desde Django
             val imgUrl = imagenes.getString(i)
-            val urlCompleta = "$baseUrl$imgUrl"
-            listaImagenes.add(urlCompleta)
+
+            // Agregar directamente
+            listaImagenes.add(imgUrl)
         }
 
+        // Mostrar primera imagen
         if (listaImagenes.isNotEmpty()) {
-            cargarImagenPrincipal(listaImagenes[0])
+
             currentImageIndex = 0
+
+            cargarImagenPrincipal(listaImagenes[0])
+
             crearMiniaturas()
+
             actualizarIndicador()
         }
     }

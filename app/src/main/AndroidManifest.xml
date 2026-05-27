@@ -41,7 +41,7 @@
                 <!-- URL permitida -->
                 <data
                     android:scheme="https"
-                    android:host="ritalin-detonator-womb.ngrok-free.dev" />
+                    android:host="agroconectavilla.onrender.com" />
 
             </intent-filter>
 
