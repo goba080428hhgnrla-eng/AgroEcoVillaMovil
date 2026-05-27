@@ -26,17 +26,18 @@
         android:layout_marginBottom="30dp"/>
 
     <!-- Campo para ingresar el email -->
+
+    <!-- Campo para la contraseña: -->
     <EditText
         android:id="@+id/etCorreo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginBottom="15dp"
+        android:background="@android:drawable/editbox_background"
         android:hint="Correo electrónico"
         android:inputType="textEmailAddress"
-        android:background="@android:drawable/editbox_background"
-        android:paddingLeft="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:paddingLeft="15dp" />
 
-    <!-- Campo para la contraseña: -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"

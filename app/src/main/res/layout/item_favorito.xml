@@ -52,7 +52,7 @@
                 android:text="$100"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#2ecc71"
+                android:textColor="#398CE7"
                 android:layout_marginTop="6dp"/>
 
         </LinearLayout>
@@ -65,7 +65,7 @@
             android:layout_height="40dp"
             android:src="@android:drawable/ic_menu_delete"
             android:background="@android:color/transparent"
-            android:tint="#ff0000"/>
+            android:tint="@color/btn_eliminar"/>
 
     </LinearLayout>
 
