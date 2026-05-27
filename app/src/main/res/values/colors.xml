@@ -10,4 +10,8 @@
     <color name="bar_infe">#05255F</color>
     <color name="agregar_fav">#FF0000</color>
     <color name="btn_eliminar">#D53A3A</color>
+    <color name="txt1">#2ecc71</color>
+    <color name="txt2">#666666</color>
+    <color name="tint">#2ecc71</color>
+    <color name="parent">#e0e0e0</color>
 </resources>

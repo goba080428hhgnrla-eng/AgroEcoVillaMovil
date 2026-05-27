@@ -19,7 +19,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            android:background="#f0f0f0" />
+            android:background="@color/white" />
 
         <!-- Información -->
         <LinearLayout
@@ -35,14 +35,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#000000" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtPrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#2ecc71"
+                android:textColor="@color/botones"
                 android:layout_marginTop="4dp" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:textColor="#666666"
+                android:textColor="@color/tint"
                 android:layout_marginTop="4dp" />
 
         </LinearLayout>
@@ -72,7 +72,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@android:drawable/ic_input_delete"
-                    android:background="#e0e0e0"
+                    android:background="@color/parent"
                     android:padding="8dp" />
 
                 <TextView
@@ -83,14 +83,14 @@
                     android:gravity="center"
                     android:textSize="14sp"
                     android:layout_marginHorizontal="4dp"
-                    android:background="#f5f5f5" />
+                    android:background="@color/white" />
 
                 <ImageButton
                     android:id="@+id/btnMas"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@android:drawable/ic_input_add"
-                    android:background="btn_agregarproduc"
+                    android:background="@color/botones"
                     android:padding="8dp" />
 
             </LinearLayout>
@@ -102,7 +102,7 @@
                 android:src="@android:drawable/ic_menu_delete"
                 android:background="#ffffff"
                 android:layout_marginTop="8dp"
-                android:tint="@color/btn_eliminar" />
+                app:tint="@color/btn_eliminar" />
 
         </LinearLayout>
 
