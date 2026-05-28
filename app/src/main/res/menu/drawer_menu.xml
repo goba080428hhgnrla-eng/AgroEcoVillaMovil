@@ -4,18 +4,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_inicio_drawer"
-            android:icon="@drawable/ic_home"
+            android:icon="@android:drawable/ic_dialog_map"
             android:title="Inicio" />
 
        <item
             android:id="@+id/nav_favorito"
-            android:icon="@drawable/baseline_favorite_24"
+            android:icon="@android:drawable/ic_menu_gallery"
             android:title="Favoritos" />
 
-        <item
-            android:id="@+id/nav_favorito"
-            android:icon="@drawable/baseline_delivery"
-            android:title="Ser Reparidor" />
+        <!--<item
+            android:id="@+id/nav_Compras_drawer"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Mis compras" />-->
 
         <!-- <item
             android:id="@+id/nav_carrito_drawer"
@@ -42,12 +42,12 @@
         <item
             android:id="@+id/nav_ayuda"
             android:icon="@android:drawable/ic_menu_help"
-            android:title="Ayuda" />-->
+            android:title="Ayuda" />
 
         <item
             android:id="@+id/nav_cerrar_sesion"
             android:icon="@android:drawable/ic_menu_close_clear_cancel"
-            android:title="Cerrar Sesión" />
+            android:title="Cerrar Sesión" />-->
     </group>
 
 </menu>

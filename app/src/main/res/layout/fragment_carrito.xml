@@ -40,7 +40,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@android:drawable/ic_menu_edit"
-            android:tint="#cccccc" />
+            app:tint="#cccccc" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#ffffff"
+        android:background="@color/white"
         android:elevation="8dp"
         android:padding="16dp"
         android:visibility="gone">
@@ -99,7 +99,7 @@
                 android:text="$0.00"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#2ecc71" />
+                android:textColor="@color/txtBtn" />
 
         </LinearLayout>
 
@@ -115,7 +115,7 @@
                 android:layout_weight="1"
                 android:text="Cantidad de items:"
                 android:textSize="14sp"
-                android:textColor="#666666" />
+                android:textColor="@color/txtBtn" />
 
             <TextView
                 android:id="@+id/txtCantidadItems"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="14sp"
-                android:textColor="#666666" />
+                android:textColor="@color/txtBtn" />
 
         </LinearLayout>
 
@@ -133,8 +133,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Continuar con el pedido"
-            android:backgroundTint="#2ecc71"
-            android:textColor="#ffffff"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
     </LinearLayout>
