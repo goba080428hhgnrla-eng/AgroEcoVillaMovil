@@ -122,15 +122,16 @@ class MainMenuActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                     true
                 }
-                //R.id.nav_Compras_drawer -> {
-                //  Toast.makeText(this@MainMenuActivity, "Mis Compras - Próximamente", Toast.LENGTH_SHORT).show()
-                //drawerLayout.closeDrawers()
-                //true
-                //}
-                //R.id.nav_cerrar_sesion -> {
-                //  cerrarSesion()
-                //true
-                //}
+                R.id.nav_favorito -> {
+                    val favoritosFragment = FavoritosFragment.newInstance(usuarioId)
+                    replaceFragment(favoritosFragment)
+                drawerLayout.closeDrawers()
+                true
+                }
+                R.id.nav_cerrar_sesion -> {
+                  cerrarSesion()
+                true
+                }
                 else -> false
             }
         }

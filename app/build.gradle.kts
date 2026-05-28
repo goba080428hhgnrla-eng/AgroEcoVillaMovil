@@ -54,8 +54,10 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.fragment:fragment-ktx:1.7.1")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }
