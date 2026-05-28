@@ -122,9 +122,9 @@ class MainMenuActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                     true
                 }
-                R.id.nav_favorito -> {
-                    val favoritosFragment = FavoritosFragment.newInstance(usuarioId)
-                    replaceFragment(favoritosFragment)
+                R.id.nav_repartidor -> {
+                    val repartidor = RepartidoresFragment.newInstance(usuarioId)
+                    replaceFragment(repartidor)
                 drawerLayout.closeDrawers()
                 true
                 }
