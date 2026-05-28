@@ -10,4 +10,5 @@
     <color name="bar_infe">#05255F</color>
     <color name="agregar_fav">#FF0000</color>
     <color name="btn_eliminar">#D53A3A</color>
+    <color name="btn_agregarproduc">#27AE60</color>
 </resources>
