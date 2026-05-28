@@ -20,6 +20,16 @@ import com.example.agroconectavilla.network.CarritoItem
 import com.example.agroconectavilla.network.Producto
 import com.example.agroconectavilla.utils.Constants
 import org.json.JSONObject
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.widget.EditText
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class CarritoFragment : Fragment() {
 
@@ -493,39 +503,144 @@ class CarritoFragment : Fragment() {
     }
 
     private fun finalizarPedido() {
+        // Verificar si el usuario ha otorgado permisos de GPS
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Si no hay permisos, los solicitamos al sistema
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                1001
+            )
+            return
+        }
 
-        val url = "$baseUrl"+"api/pedidos/crear/"
+        // Activar barra de carga mientras lee el GPS
+        mostrarLoading(true)
 
+        // Inicializar el lector de ubicación de Google Play Services
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        try {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                mostrarLoading(false)
+                if (location != null) {
+                    // Si obtuvo la ubicación con éxito, abrimos la confirmación tipo Figma
+                    mostrarDialogoConfirmacionPedido(location.latitude, location.longitude)
+                } else {
+                    // Ubicación por defecto si el GPS está apagado momentáneamente en el cel
+                    Toast.makeText(requireContext(), "No se pudo obtener la ubicación exacta. Usando ubicación base.", Toast.LENGTH_SHORT).show()
+                    mostrarDialogoConfirmacionPedido(19.7294, -99.4601) // Centro de Villa del Carbón
+                }
+            }.addOnFailureListener {
+                mostrarLoading(false)
+                Toast.makeText(requireContext(), "Error al activar el GPS", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: SecurityException) {
+            mostrarLoading(false)
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Despliega la ventana de confirmación interactiva para el cliente,
+     * solicitando confirmación de su mapa/dirección tal como tu Wireframe.
+     */
+    private fun mostrarDialogoConfirmacionPedido(latitud: Double, longitud: Double) {
+        // Crear la instancia del contenedor deslizable moderno
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val viewSheet = layoutInflater.inflate(R.layout.bottom_sheet_confirmar_pedido, null)
+        bottomSheetDialog.setContentView(viewSheet)
+
+        // Vincular los elementos de la UI del BottomSheet
+        val mapView = viewSheet.findViewById<com.google.android.gms.maps.MapView>(R.id.mapViewConfirmar)
+        val etDireccion = viewSheet.findViewById<EditText>(R.id.etDireccionConfirmar)
+        val btnConfirmar = viewSheet.findViewById<Button>(R.id.btnConfirmarPedidoFinal)
+
+        // Inicializar y pintar el Mapa dentro del cuadro
+        mapView.onCreate(null)
+        mapView.onResume()
+        mapView.getMapAsync { googleMap ->
+            val ubicacionCliente = LatLng(latitud, longitud)
+
+            // Añadir marcador rojo en la ubicación del GPS
+            googleMap.addMarker(
+                MarkerOptions()
+                    .position(ubicacionCliente)
+                    .title("Tu ubicación actual")
+            )
+
+            // Mover la cámara del mapa y hacer un acercamiento (Zoom 16)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionCliente, 16f))
+
+            // Configurar opciones visuales del mapa
+            googleMap.uiSettings.isZoomControlsEnabled = true
+            googleMap.uiSettings.isCompassEnabled = true
+        }
+
+        // Acción al presionar el botón moderno de confirmación
+        btnConfirmar.setOnClickListener {
+            val direccionEscrita = etDireccion.text.toString().trim()
+
+            if (direccionEscrita.isEmpty()) {
+                etDireccion.error = "Por favor ingresa referencias para el repartidor"
+                Toast.makeText(requireContext(), "La dirección es obligatoria", Toast.LENGTH_SHORT).show()
+            } else {
+                // Cerrar la ventana y mandar los datos limpios a Django
+                bottomSheetDialog.dismiss()
+                enviarPedidoServidor(latitud, longitud, direccionEscrita)
+            }
+        }
+
+        // Desplegar la interfaz elegante en la pantalla
+        bottomSheetDialog.show()
+    }
+
+    /**
+     * Procesa la comunicación final con el backend de Django mandando los datos dinámicos.
+     */
+    private fun enviarPedidoServidor(latitud: Double, longitud: Double, direccion: String) {
+        mostrarLoading(true)
+        val url = "${baseUrl}api/pedidos/crear/"
         val queue = Volley.newRequestQueue(requireContext())
-
         val params = JSONObject()
 
-        params.put("usuario_id", usuarioId)
-        params.put("direccion_entrega", "Cabecera municipal Villa del Carbón")
+        try {
+            params.put("usuario_id", usuarioId)
+            params.put("direccion", direccion) // Agarra lo que escribió el cliente
+            params.put("latitud", latitud)     // Agarra el GPS real del teléfono
+            params.put("longitud", longitud)   // Agarra el GPS real del teléfono
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         val request = JsonObjectRequest(
             Request.Method.POST,
             url,
             params,
-            {
-                Toast.makeText(
-                    requireContext(),
-                    "Pedido realizado",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                cargarCarrito()
+            { response ->
+                mostrarLoading(false)
+                Toast.makeText(requireContext(), "¡Pedido realizado con éxito!", Toast.LENGTH_LONG).show()
+                cargarCarrito() // Vacía la UI del carrito
             },
-            {
-                Toast.makeText(
-                    requireContext(),
-                    "Error al crear pedido",
-                    Toast.LENGTH_LONG
-                ).show()
+            { error ->
+                mostrarLoading(false)
+                error.printStackTrace()
+                Toast.makeText(requireContext(), "Error al procesar la orden en el servidor", Toast.LENGTH_LONG).show()
             }
         )
-
         queue.add(request)
+    }
+
+    // Escuchador por si el cliente acepta los permisos de ubicación en la alerta nativa del celular
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == 1001 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            finalizarPedido() // Reintenta el flujo si ya dio el permiso
+        } else {
+            Toast.makeText(requireContext(), "Se requiere el permiso de ubicación para calcular el envío", Toast.LENGTH_LONG).show()
+        }
     }
 
 }
