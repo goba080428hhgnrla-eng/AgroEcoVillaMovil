@@ -99,7 +99,7 @@
                 android:text="$0.00"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/txt1" />
+                android:textColor="@color/txtBtn" />
 
         </LinearLayout>
 
@@ -115,7 +115,7 @@
                 android:layout_weight="1"
                 android:text="Cantidad de items:"
                 android:textSize="14sp"
-                android:textColor="@color/txt2" />
+                android:textColor="@color/txtBtn" />
 
             <TextView
                 android:id="@+id/txtCantidadItems"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="14sp"
-                android:textColor="@color/txt2" />
+                android:textColor="@color/txtBtn" />
 
         </LinearLayout>
 
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Continuar con el pedido"
-            android:backgroundTint="@color/tint"
+            android:backgroundTint="@color/white"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
