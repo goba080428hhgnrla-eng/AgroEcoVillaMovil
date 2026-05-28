@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -179,9 +180,18 @@ class MainMenuActivity : AppCompatActivity() {
                     replaceFragment(carritoFragment)
                     true
                 }
-                R.id.nav_favorito -> {
-                    val favoritosFragment = FavoritosFragment.newInstance(usuarioId)
-                    replaceFragment(favoritosFragment)
+                R.id.nav_pedidos -> {
+
+                    val sessionManager = SessionManager(this)
+
+                    val usuarioId = sessionManager.getUsuarioId()
+
+                    Log.d("USUARIO_ID", "ID REAL: $usuarioId")
+
+                    val pedidos = PedidosFragment.newInstance(usuarioId)
+
+                    replaceFragment(pedidos)
+
                     true
                 }
                 else -> false
