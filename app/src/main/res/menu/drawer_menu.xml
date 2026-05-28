@@ -12,10 +12,10 @@
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="Favoritos" />
 
-        <item
-            android:id="@+id/nav_repartidor"
+        <!--<item
+            android:id="@+id/nav_Compras_drawer"
             android:icon="@android:drawable/ic_menu_send"
-            android:title="Ser repartidor" />
+            android:title="Mis compras" />-->
 
         <!-- <item
             android:id="@+id/nav_carrito_drawer"

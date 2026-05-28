@@ -325,33 +325,50 @@ class FragmentDetalle : Fragment() {
      * @param response Objeto [JSONObject] del servidor con la información del producto.
      */
     private fun procesarImagenes(response: JSONObject) {
-
         // Limpiar lista previa
         listaImagenes.clear()
 
-        // Obtener arreglo de imágenes desde el JSON
-        val imagenes: JSONArray = response.getJSONArray("imagenes")
+        try {
+            // Obtener arreglo de imágenes desde el JSON
+            val imagenes: JSONArray = response.getJSONArray("imagenes")
 
-        // Recorrer imágenes
-        for (i in 0 until imagenes.length()) {
+            // Recorrer imágenes
+            for (i in 0 until imagenes.length()) {
+                // Evaluamos si el elemento es un objeto JSON o un String directo
+                val elemento = imagenes.get(i)
 
-            // La URL ya viene COMPLETA desde Django
-            val imgUrl = imagenes.getString(i)
+                val imgUrl = if (elemento is JSONObject) {
+                    // Si es un objeto (Escenario A), extraemos la propiedad "imagen"
+                    elemento.optString("imagen", "")
+                } else {
+                    // Si es un String directo (Ruta cruda), lo usamos directamente
+                    imagenes.getString(i)
+                }
 
-            // Agregar directamente
-            listaImagenes.add(imgUrl)
-        }
+                // Solo agregamos la URL si no está vacía
+                if (imgUrl.isNotEmpty()) {
+                    listaImagenes.add(imgUrl)
+                }
+            }
 
-        // Mostrar primera imagen
-        if (listaImagenes.isNotEmpty()) {
+            // Mostrar y sincronizar el carrusel gráfico
+            if (listaImagenes.isNotEmpty()) {
+                currentImageIndex = 0
+                cargarImagenPrincipal(listaImagenes[0])
+                crearMiniaturas()
+                actualizarIndicador()
+            } else {
+                // Opcional: Cargar una imagen por defecto si el producto no tiene fotos
+                txtImageIndicator.visibility = View.GONE
+            }
 
-            currentImageIndex = 0
-
-            cargarImagenPrincipal(listaImagenes[0])
-
-            crearMiniaturas()
-
-            actualizarIndicador()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(
+                requireContext(),
+                "Error al procesar la galería de imágenes",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -553,6 +570,7 @@ class FragmentDetalle : Fragment() {
                 return headers
             }
         }
+
 
         queue.add(request)
     }
