@@ -30,10 +30,10 @@
         app:cardElevation="0dp"
         android:layout_marginBottom="16dp">
 
-        <com.google.android.gms.maps.MapView
+        <org.osmdroid.views.MapView
             android:id="@+id/mapViewConfirmar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="250dp" />
     </androidx.cardview.widget.CardView>
 
     <TextView
