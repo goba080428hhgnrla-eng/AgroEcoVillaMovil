@@ -90,7 +90,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@android:drawable/ic_input_add"
-                    android:background="btn_agregarproduc"
+                    android:background="@color/btn_agregarproduc"
                     android:padding="8dp" />
 
             </LinearLayout>
@@ -100,9 +100,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_delete"
-                android:background="#ffffff"
+                android:background="@color/botones"
                 android:layout_marginTop="8dp"
-                android:tint="@color/btn_eliminar" />
+                app:backgroundTint="@color/btn_eliminar" />
 
         </LinearLayout>
 

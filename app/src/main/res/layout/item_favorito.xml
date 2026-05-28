@@ -65,7 +65,7 @@
             android:layout_height="40dp"
             android:src="@android:drawable/ic_menu_delete"
             android:background="@android:color/transparent"
-            android:tint="@color/btn_eliminar"/>
+            app:backgroundTint="@color/btn_eliminar"/>
 
     </LinearLayout>
 
