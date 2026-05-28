@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="30dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
+        android:id="@+id/etBuscarProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="Buscar producto"
-        android:layout_margin="10dp"
-        android:padding="10dp"
         android:background="@drawable/bg_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerProductos"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <!-- BUSCADOR -->
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerProductos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/txtVacio"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="No hay productos disponibles"
-        android:textSize="16sp"
         android:visibility="gone" />
 
 </LinearLayout>
