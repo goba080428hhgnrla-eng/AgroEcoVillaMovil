@@ -42,4 +42,17 @@
         android:textSize="12sp"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/txtNoEntregable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No entregable"
+        android:textColor="#FFFFFF"
+        android:background="#FF9800"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </LinearLayout>

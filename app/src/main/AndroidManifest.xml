@@ -1,69 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Archivo principal -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.agroconectavilla">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="mx.teknoeducativa.agroconectavilla">
 
-    <!-- Permiso para internet -->
+    <!-- ========== PERMISOS NECESARIOS ========== -->
+
+    <!-- Internet y Red -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <!-- Permisos de Ubicación -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <meta-data
-        android:name="com.google.android.com.keys.API_KEY"
-        android:value="TU_API_KEY_DE_GOOGLE_MAPS"/>
+    <!-- Para Android 10+ (API 29+) - Ubicación en segundo plano -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- Permisos para Foreground Service (Android 14+) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <!-- Almacenamiento (para caché de mapas) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+
+    <!-- Para notificaciones (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Para mantener la app despierta durante la navegación -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- ========== CARACTERÍSTICAS DEL DISPOSITIVO ========== -->
+
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
 
     <application
+        android:name=".AgroConectaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
-        <!-- MAIN -->
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:targetApi="31">
+
+        <!-- ========== METADATA ========== -->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="TU_API_KEY_DE_GOOGLE_MAPS" />
+
+        <meta-data
+            android:name="org.osmdroid.BASE_PATH"
+            android:value="osmdroid" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <!-- ========== ACTIVITIES ========== -->
+
+        <!-- MAIN - Launcher -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <!-- Launcher -->
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTop">
+
             <intent-filter>
-                <!-- Inicio app -->
                 <action android:name="android.intent.action.MAIN" />
-                <!-- Icono launcher -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Link -->
+
             <intent-filter>
-
-                <!-- Abrir enlace -->
                 <action android:name="android.intent.action.VIEW" />
-
-                <!-- Categoría default -->
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <!-- Abrir desde navegador -->
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- URL permitida -->
                 <data
                     android:scheme="https"
                     android:host="agroconectavilla.onrender.com" />
-
             </intent-filter>
-
         </activity>
 
         <!-- Registro -->
         <activity
             android:name=".RegistroActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
 
-        <!-- Menú principal -->
+        <!-- Menú principal comprador/productor -->
         <activity
             android:name=".MainMenuActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Seguimiento de pedido para clientes -->
+        <activity
+            android:name=".SeguimientoClienteActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainMenuActivity" />
+
+        <!-- Oferta de viaje (diálogo) -->
+        <activity
+            android:name=".OfertaViajeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:parentActivityName=".MainMenuActivity" />
+
+        <activity
+            android:name=".MenuRepartidorActivity"
+            android:exported="false" />
+
+        <!-- ========== SERVICES ========== -->
+
+        <!-- Servicio WebSocket para repartidores -->
+        <service
+            android:name=".WebSocketService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Servicio de tracking para clientes -->
+        <service
+            android:name=".TrackingService"
+            android:enabled="true"
+            android:exported="false" />
 
     </application>
-<!--Fin de manifest-->
+
 </manifest>

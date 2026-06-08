@@ -93,10 +93,7 @@
             android:layout_marginBottom="20dp"
             android:padding="10dp"
             android:inputType="phone"
-            android:textColor="@color/black"
-            android:focusable="false"
-            android:clickable="false"
-            android:cursorVisible="false"/>
+            android:textColor="@color/black"/>
 
         <!-- Automóvil -->
         <TextView

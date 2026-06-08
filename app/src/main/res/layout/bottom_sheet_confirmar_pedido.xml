@@ -1,69 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="16dp">
 
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"
-        android:background="#E0E0E0" />
+        android:background="#D3D3D3" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirmar punto de entrega"
-        android:textColor="#212121"
-        android:textSize="20sp"
+        android:text="Confirmar Ubicación de Entrega"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="12dp"/>
 
-    <androidx.cardview.widget.CardView
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapViewConfirmar"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        android:layout_marginBottom="16dp">
-
-        <org.osmdroid.views.MapView
-            android:id="@+id/mapViewConfirmar"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dirección / Referencias de entrega"
-        android:textColor="#616161"
-        android:textSize="14sp"
-        android:layout_marginBottom="8dp" />
+        android:layout_height="250dp"
+        android:layout_marginBottom="12dp" />
 
     <EditText
         android:id="@+id/etDireccionConfirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ej. Av. Hidalgo #4, portón negro frente al parque"
-        android:background="@android:drawable/edit_text"
-        android:padding="14dp"
-        android:textSize="15sp"
+        android:hint="Ej. Casa de fachada azul junto a la tienda, Calle..."
         android:inputType="textPostalAddress"
+        android:layout_marginBottom="16dp" />
+    <EditText
+        android:id="@+id/etReferenciaConfirmar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:hint="Ej. Portón zaguán verde frente a la escuela"
+        android:inputType="text"
+        android:textColor="#333333"
+        android:textSize="15sp"
         android:layout_marginBottom="24dp" />
 
     <Button
         android:id="@+id/btnConfirmarPedidoFinal"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:text="Confirmar y solicitar pedido"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:backgroundTint="#4CAF50"
-        android:textColor="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:text="Confirmar y Enviar Pedido" />
 
 </LinearLayout>

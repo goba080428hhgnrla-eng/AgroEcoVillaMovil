@@ -3,4 +3,19 @@
     <string name="descripcion">Descripción</string>
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
+    <string name="contacto_correo">goba080428hhgnrla0@cecytem.mx</string>
+    <string name="contacto_whatsapp">525661406007</string> <string name="whatsapp_mensaje_predeterminado">Hola, necesito soporte con la app Mercado Agromexiquense.</string>
+    <string name="correo_asunto_predeterminado">Soporte - Mercado Agromexiquense</string>
+
+    <string name="soporte_titulo">Soporte al Usuario</string>
+    <string name="soporte_introduccion">Mercado Agromexiquense ofrece atención a todos los actores de la plataforma: clientes, productores, repartidores y administradores.\n\n¿En qué podemos ayudarte?</string>
+    <string name="soporte_puntos">• Dificultades para ingresar al panel o app.\n• Errores al publicar o modificar productos.\n• Dudas sobre precios o productos entregables.\n• Problemas al generar o consultar pedidos.\n• Inconvenientes con pedidos asignados.\n• Reporte de fallas técnicas y sugerencias.</string>
+    <string name="btn_enviar_correo">Enviar Correo Electrónico</string>
+    <string name="btn_enviar_whatsapp">Enviar WhatsApp</string>
+
+    <string name="privacidad_titulo">Política de Privacidad</string>
+    <string name="privacidad_cuerpo">Mercado Agromexiquense tiene como prioridad el manejo responsable de la información de quienes utilizan la plataforma. Todo dato recopilado se destina exclusivamente al funcionamiento del mercado agroecológico en línea, sin compartirse con terceros.\n\nDurante el uso de la plataforma se recopilan datos como nombre, correo, fotografías, descripciones de productos, precios e historial de pedidos según el rol del usuario (Productor, Administrador, Repartidor o Cliente).\n\nCada productor asume la responsabilidad sobre la información que publica. La plataforma aplica medidas de seguridad para proteger la información frente a accesos no autorizados. Esta política podrá modificarse sin previo aviso.</string>
+    <string name="menu_soporte">Soporte al Usuario</string>
+    <string name="menu_privacidad">Política de Privacidad</string>
+
 </resources>
